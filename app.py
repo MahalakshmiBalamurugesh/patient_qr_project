@@ -9,12 +9,12 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('register.html')
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    name = request.form['name']
-    contact = request.form['contact']
-    pin = request.form['pin']
+    if request.method == 'POST':
         name = request.form['name']
+        age = request.form['age']
+        blood_group = request.form['blood']
         contact = request.form['contact']
         pin = request.form['pin']
         
