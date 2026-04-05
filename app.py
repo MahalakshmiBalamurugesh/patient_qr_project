@@ -5,6 +5,28 @@ import uuid
 import os
 conn = sqlite3.connect('patients.db', check_same_thread=False)
 cursor = conn.cursor()
+# Create tables if not exist
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS patients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    age INTEGER,
+    blood_group TEXT,
+    contact TEXT,
+    pin TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS qr_codes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    patient_id INTEGER,
+    qr_token TEXT UNIQUE
+)
+""")
+
+conn.commit()
 app = Flask(__name__)
 @app.route('/')
 def home():
@@ -17,15 +39,12 @@ def register():
         blood_group = request.form['blood_group']
         contact = request.form['contact']
         pin = request.form['pin']
-        
-
+        cursor.execute(
+            "INSERT INTO patients (name, age, blood_group, contact, pin) VALUES (?, ?, ?, ?, ?)",
+            (name, age, blood_group, contact, pin)
+        )
     # Save patient
-    cursor.execute(
-        "INSERT INTO patients (name, age, blood_group, contact, pin) VALUES (?, ?, ?, ?, ?)",
-        (name, age, blood_group, contact, pin)
-    )
     conn.commit()
-
     patient_id = cursor.lastrowid
 
     # Generate QR token
