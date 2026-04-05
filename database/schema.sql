@@ -5,5 +5,4 @@ CREATE TABLE patients (
   blood_group VARCHAR(5),
   contact VARCHAR(15),
   pin VARCHAR(10),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
