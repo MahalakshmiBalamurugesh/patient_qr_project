@@ -7,18 +7,9 @@ import sqlite3
 conn = sqlite3.connect('patients.db', check_same_thread=False)
 cursor = conn.cursor()
 
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS patients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    age INTEGER,
-    blood_group TEXT,
-    contact TEXT,
-    pin TEXT
-)
-''')
+ 
 
-conn.commit()
+ 
 
 app = Flask(__name__)
 
