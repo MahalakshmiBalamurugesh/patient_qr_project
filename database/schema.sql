@@ -1,0 +1,9 @@
+CREATE TABLE patients (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100),
+  age INT,
+  blood_group VARCHAR(5),
+  contact VARCHAR(15),
+  pin VARCHAR(10),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
