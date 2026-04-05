@@ -1,28 +1,27 @@
 CREATE TABLE patients (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100),
-  age INT,
-  blood_group VARCHAR(5),
-  contact VARCHAR(15),
-  pin VARCHAR(10),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  age INTEGER,
+  blood_group TEXT,
+  contact TEXT,
+  pin TEXT
 );
 
 CREATE TABLE qr_codes (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  patient_id INT,
-  qr_token VARCHAR(255) UNIQUE
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  patient_id INTEGER,
+  qr_token TEXT UNIQUE
 );
 
 CREATE TABLE access_requests (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  patient_id INT,
-  doctor_id INT,
-  status VARCHAR(20)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  patient_id INTEGER,
+  doctor_id INTEGER,
+  status TEXT
 );
 
 CREATE TABLE doctors (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100),
-  hospital VARCHAR(100)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  hospital TEXT
 );
