@@ -14,7 +14,7 @@ def register():
     if request.method == 'POST':
         name = request.form['name']
         age = request.form['age']
-        blood_group = request.form['blood']
+        blood_group = request.form['blood_group']
         contact = request.form['contact']
         pin = request.form['pin']
         
