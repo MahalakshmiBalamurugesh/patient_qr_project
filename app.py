@@ -13,9 +13,10 @@ def register():
     age = request.form['age']
     blood_group = request.form['blood_group']
     contact = request.form['contact']
+    pin = request.form['pin']
 
     patient_id = "P" + str(random.randint(1000, 9999))
-    pin = str(random.randint(1000, 9999))
+     
 
     return f"""
     <h2>Registration Successful</h2>
