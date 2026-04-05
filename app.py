@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request
-import random
+import sqlite3
 import qrcode
+import uuid
 import os
-
+conn = sqlite3.connect('patients.db', check_same_thread=False)
+cursor = conn.cursor()
 app = Flask(__name__)
-
 @app.route('/')
 def home():
     return render_template('register.html')
-
 @app.route('/register', methods=['POST'])
 def register():
     name = request.form['name']
@@ -17,18 +17,53 @@ def register():
     contact = request.form['contact']
     pin = request.form['pin']
 
-    patient_id = "P" + str(random.randint(1000, 9999))
-    # Generate QR
-    qr_data = f"Patient ID: {patient_id}"
-    qr = qrcode.make(qr_data)
-    # # Save QR image
+    # Save patient
+    cursor.execute(
+        "INSERT INTO patients (name, age, blood_group, contact, pin) VALUES (?, ?, ?, ?, ?)",
+        (name, age, blood_group, contact, pin)
+    )
+    conn.commit()
+
+    patient_id = cursor.lastrowid
+
+    # Generate QR token
+    qr_token = str(uuid.uuid4())
+
+    # Save QR token
+    cursor.execute(
+        "INSERT INTO qr_codes (patient_id, qr_token) VALUES (?, ?)",
+        (patient_id, qr_token)
+    )
+    conn.commit()
+
+    # Generate QR image
+    qr = qrcode.make(qr_token)
+
     qr_path = f"static/{patient_id}.png"
     qr.save(qr_path)
-    return render_template("success.html",
-                       name=name,
-                       patient_id=patient_id,
-                       pin=pin,
-                       qr_image=qr_path)
 
+    return render_template("success.html",
+                           name=name,
+                           patient_id=patient_id,
+                           pin=pin,
+                           qr_image=qr_path)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        patient_id = request.form['patient_id']
+        pin = request.form['pin']
+
+        cursor.execute(
+            "SELECT * FROM patients WHERE id=? AND pin=?",
+            (patient_id, pin)
+        )
+        result = cursor.fetchone()
+
+        if result:
+            return "Login successful ✅"
+        else:
+            return "Invalid ID or PIN ❌"
+
+    return render_template('login.html')
 if __name__ == '__main__':
     app.run(debug=True)
