@@ -7,3 +7,22 @@ CREATE TABLE patients (
   pin VARCHAR(10),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE qr_codes (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  patient_id INT,
+  qr_token VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE access_requests (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  patient_id INT,
+  doctor_id INT,
+  status VARCHAR(20)
+);
+
+CREATE TABLE doctors (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100),
+  hospital VARCHAR(100)
+);
