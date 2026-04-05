@@ -25,3 +25,12 @@ CREATE TABLE doctors (
   name TEXT,
   hospital TEXT
 );
+
+CREATE TABLE medical_records (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  patient_id INTEGER,
+  doctor_id INTEGER,
+  diagnosis TEXT,
+  prescription TEXT,
+  notes TEXT
+);
