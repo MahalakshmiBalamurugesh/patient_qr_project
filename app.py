@@ -12,10 +12,12 @@ def home():
 @app.route('/register', methods=['POST'])
 def register():
     name = request.form['name']
-    age = request.form['age']
-    blood_group = request.form['blood_group']
     contact = request.form['contact']
     pin = request.form['pin']
+        name = request.form['name']
+        contact = request.form['contact']
+        pin = request.form['pin']
+        
 
     # Save patient
     cursor.execute(
@@ -60,7 +62,11 @@ def login():
         result = cursor.fetchone()
 
         if result:
-            return "Login successful ✅"
+            return render_template("success.html",
+                                   name=result[1],
+                                   patient_id=result[0],
+                                   pin=result[5],
+                                   qr_image=f"static/{result[0]}.png")
         else:
             return "Invalid ID or PIN ❌"
 
