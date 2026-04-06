@@ -3,7 +3,7 @@ import sqlite3
 import qrcode
 import uuid
 import os
-conn = sqlite3.connect('patients.db', check_same_thread=False)
+conn = sqlite3.connect('database/patients.db', check_same_thread=False)
 cursor = conn.cursor()
 # Create tables if not exist
 
@@ -39,35 +39,40 @@ def register():
         blood_group = request.form['blood_group']
         contact = request.form['contact']
         pin = request.form['pin']
+
+        # Save patient
         cursor.execute(
             "INSERT INTO patients (name, age, blood_group, contact, pin) VALUES (?, ?, ?, ?, ?)",
             (name, age, blood_group, contact, pin)
         )
-    # Save patient
-    conn.commit()
-    patient_id = cursor.lastrowid
+        conn.commit()
 
-    # Generate QR token
-    qr_token = str(uuid.uuid4())
+        patient_id = cursor.lastrowid
 
-    # Save QR token
-    cursor.execute(
-        "INSERT INTO qr_codes (patient_id, qr_token) VALUES (?, ?)",
-        (patient_id, qr_token)
-    )
-    conn.commit()
+        # Generate QR token
+        qr_token = str(uuid.uuid4())
 
-    # Generate QR image
-    qr = qrcode.make(qr_token)
+        # Save QR token
+        cursor.execute(
+            "INSERT INTO qr_codes (patient_id, qr_token) VALUES (?, ?)",
+            (patient_id, qr_token)
+        )
+        conn.commit()
 
-    qr_path = f"static/{patient_id}.png"
-    qr.save(qr_path)
+        # Generate QR image
+        qr_url = f"http://127.0.0.1:5000/scan/{qr_token}"
+        qr = qrcode.make(qr_url)
 
-    return render_template("success.html",
-                           name=name,
-                           patient_id=patient_id,
-                           pin=pin,
-                           qr_image=qr_path)
+        qr_path = f"static/{patient_id}.png"
+        qr.save(qr_path)
+
+        return render_template("success.html",
+                               name=name,
+                               patient_id=patient_id,
+                               pin=pin,
+                               qr_image=qr_path)
+
+    return render_template('register.html')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
