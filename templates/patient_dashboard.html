@@ -1,0 +1,17 @@
+<h2>Patient Dashboard</h2>
+
+<table border="1">
+<tr>
+    <th>Diagnosis</th>
+    <th>Prescription</th>
+    <th>Notes</th>
+</tr>
+
+{% for r in records %}
+<tr>
+    <td>{{ r[3] }}</td>
+    <td>{{ r[4] }}</td>
+    <td>{{ r[5] }}</td>
+</tr>
+{% endfor %}
+</table>
